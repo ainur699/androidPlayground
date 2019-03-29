@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    buildTypes {
+        debug {
+            minifyEnabled false // ProGuard remove unused classes
+            shrinkResources false // ProGuard remove unused resources
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt', 'proguard-rules-debug.txt'
+            debuggable true
+        }
+
+        release {
+            minifyEnabled false // ProGuard remove unused classes
+            shrinkResources false // ProGuard remove unused resources
+            proguardFiles 'proguard-rules.txt', 'proguard-rules-release.txt'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "../../src_cpp/CMakeLists.txt"
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+            jniLibs.srcDirs = ['../../src_cpp/libs']
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.vicman.jnitest"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    dexOptions {
+        javaMaxHeapSize "5g"
+    }
+
+    externalNativeBuild {
+        cmake {
+            version "3.10.2"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'org.jetbrains:annotations-java5:17.0.0'
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+
+    implementation 'frankiesardo:icepick:3.2.0'
+    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+
+    implementation "com.google.android.exoplayer:exoplayer:2.6.1"
+
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1' //up version only with androidX
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.github.mrmike:ok2curl:0.4.4'
+    implementation ('com.squareup.retrofit2:retrofit:2.1.0') {
+        exclude module: 'okhttp'
+    }
+    implementation ('com.squareup.retrofit2:converter-simplexml:2.1.0'){
+        exclude module: 'stax-api'
+        exclude module: 'stax'
+        exclude module: 'xpp3'
+    }
+
+    implementation project(path: ':openCV_v3.4.3')
+}

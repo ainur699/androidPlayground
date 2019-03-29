@@ -1,0 +1,2 @@
+include ':app', ':mobile-ffmpeg-min-gpl-3.1'
+include ':openCV_v3.4.3'

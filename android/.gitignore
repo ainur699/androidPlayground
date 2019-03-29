@@ -1,0 +1,10 @@
+*.iml
+.gradle
+/local.properties
+/.idea/*
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+/openCV_v3.4.3/build/
+app/src/main/res/raw/movie.mp4

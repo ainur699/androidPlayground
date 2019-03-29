@@ -1,0 +1,17 @@
+<network-security-config>
+
+    <!-- Charles SSL -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user added CAs while debuggable only -->
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+
+    <!-- Android 9 cleartext -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">pho.to</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+
+</network-security-config>
