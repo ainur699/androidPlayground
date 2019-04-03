@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import com.vicman.jnitest.fragments.ImageFragment;
 import com.vicman.jnitest.fragments.InfoFragment;
-import com.vicman.jnitest.fragments.VideoFragment;
+import com.vicman.jnitest.fragments.GifFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private static final int INFO_FRAGMENT_POS = 0;
@@ -40,7 +40,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case IMAGE_FRAGMENT_POS:
                 return ImageFragment.PAGE_TITLE;
             case VIDEO_FRAGMENT_POS:
-                return VideoFragment.PAGE_TITLE;
+                return GifFragment.PAGE_TITLE;
             default:
                 throw new IllegalStateException("Invalid cow page position: " + position);
         }
@@ -54,7 +54,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case IMAGE_FRAGMENT_POS:
                 return ImageFragment.createInstance();
             case VIDEO_FRAGMENT_POS:
-                return VideoFragment.createInstance();
+                return GifFragment.createInstance();
             default:
                 throw new IllegalStateException("Invalid cow page position: " + position);
         }

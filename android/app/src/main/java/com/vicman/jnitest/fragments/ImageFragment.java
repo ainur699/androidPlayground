@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
@@ -29,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import static android.graphics.Bitmap.Config.ARGB_8888;
 
 public class ImageFragment extends BaseFragment {
@@ -41,16 +41,15 @@ public class ImageFragment extends BaseFragment {
 
     static { System.loadLibrary("jnitest"); }
 
-    private native void ProcessImage(Bitmap inputBitmap, long outputMatAddr);
+    private native void addTextToImage(Bitmap inputBitmap, long outputMatAddr);
+
     public static @NonNull ImageFragment createInstance() {
         return new ImageFragment();
     }
 
     @Override
     public @Nullable View onCreateView(final @NonNull LayoutInflater inflater, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
-        View returnView = inflater.inflate(R.layout.image_fragment, container, false);
-        testImage();
-        return returnView;
+        return inflater.inflate(R.layout.image_fragment, container, false);
     }
 
     @OnClick(R.id.button_open_image)
@@ -185,14 +184,18 @@ public class ImageFragment extends BaseFragment {
                 return null;
             }
 
+            final long startTime = SystemClock.elapsedRealtime();
+
             Mat outputMap = new Mat();
             long nativeObjAddr = outputMap.getNativeObjAddr();
-            ProcessImage(bitmap, nativeObjAddr);
+            addTextToImage(bitmap, nativeObjAddr);
 
             Bitmap dst_bitmap = Bitmap.createBitmap(512, 700, ARGB_8888 );
             org.opencv.android.Utils.matToBitmap(outputMap, dst_bitmap);
 
-            return Pair.create(dst_bitmap, 0L);
+            final long endTime = SystemClock.elapsedRealtime();
+
+            return Pair.create(dst_bitmap, endTime - startTime);
         }
 
         @Override

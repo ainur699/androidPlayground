@@ -43,7 +43,7 @@ void BitmapToMat(JNIEnv* env, jobject, jobject inBitmap ,cv::Mat &dst)
 }
 
 
-extern "C" JNIEXPORT void JNICALL Java_com_vicman_jnitest_fragments_ImageFragment_ProcessImage(JNIEnv* env, jobject This/* this */, jobject inBitmap, jlong outMatAddr)
+extern "C" JNIEXPORT void JNICALL Java_com_vicman_jnitest_fragments_ImageFragment_addTextToImage(JNIEnv* env, jobject This/* this */, jobject inBitmap, jlong outMatAddr)
 {
     cv::Mat *dst = (cv::Mat*) outMatAddr;
 
@@ -54,4 +54,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_vicman_jnitest_fragments_ImageFragmen
     cv::putText(img, "Hello from C++", cv::Point(50, 600), cv::HersheyFonts::FONT_HERSHEY_COMPLEX, 1.5, cv::Scalar(0,0,0,255), 2, cv::LINE_AA);
 
     img.copyTo(*dst);
+}
+
+extern "C" JNIEXPORT jbyteArray JNICALL Java_com_vicman_jnitest_fragments_GifFragment_addTextToGif(JNIEnv* env, jobject This/* this */, jbyteArray sourceGif) {
+    return sourceGif;
 }
