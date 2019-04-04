@@ -8,10 +8,24 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/LibBase/
 add_library( lib_opencv SHARED IMPORTED )
 set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/libs/${ANDROID_ABI}/libopencv_java3.so)
 
+set(
+        GIFLIB_SRC
+        giflib/dgif_lib.c
+        giflib/egif_lib.c
+        giflib/gif_err.c
+        giflib/gif_font.c
+        giflib/gif_hash.c
+        giflib/gifalloc.c
+        giflib/openbsd-reallocarray.c
+        giflib/quantize.c
+)
+
 add_library(
         ${PROJECT_NAME}
         SHARED
         jnitest.cpp
+        iogif.cpp
+        ${GIFLIB_SRC}
 )
 
 add_library( libstd SHARED IMPORTED )

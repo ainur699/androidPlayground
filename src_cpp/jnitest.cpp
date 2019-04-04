@@ -1,4 +1,4 @@
-#include <jni.h>
+#include "iogif.hpp"
 #include <android/bitmap.h>
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
@@ -56,6 +56,24 @@ extern "C" JNIEXPORT void JNICALL Java_com_vicman_jnitest_fragments_ImageFragmen
     img.copyTo(*dst);
 }
 
-extern "C" JNIEXPORT jbyteArray JNICALL Java_com_vicman_jnitest_fragments_GifFragment_addTextToGif(JNIEnv* env, jobject This/* this */, jbyteArray sourceGif) {
-    return sourceGif;
+extern "C" JNIEXPORT jbyteArray JNICALL Java_com_vicman_jnitest_fragments_GifFragment_addTextToGif(JNIEnv* env, jobject This/* this */, jbyteArray sourceGif)
+{
+    jsize gif_data_size = env->GetArrayLength(sourceGif);
+    uchar* gif_data_ptr = (uchar*)env->GetByteArrayElements(sourceGif, NULL);
+    std::vector<uchar> raw_gif(gif_data_ptr, gif_data_ptr + gif_data_size);
+
+    std::vector<cv::Mat> imgs = gif_read(raw_gif);
+
+    for(size_t i = 0; i < imgs.size(); i++) {
+        cv::copyMakeBorder(imgs[i], imgs[i], 0, 188, 0, 0, cv::BORDER_CONSTANT, cv::Scalar::all(255));
+        cv::putText(imgs[i], "Hello from C++", cv::Point(10 * i, 600), cv::HersheyFonts::FONT_HERSHEY_COMPLEX, 1.5, cv::Scalar(0,0,0), 2, cv::LINE_AA);
+    }
+
+    std::vector<uchar> dst_raw_gif;
+    gif_write(dst_raw_gif, imgs);
+
+    jbyteArray ret = (jbyteArray) env->NewByteArray(dst_raw_gif.size());
+    env->SetByteArrayRegion (ret, 0, dst_raw_gif.size(), (const jbyte*)dst_raw_gif.data());
+
+    return ret;
 }
